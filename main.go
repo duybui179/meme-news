@@ -1,13 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
-// Hàm Sum để chúng ta chạy unit test
-func Sum(a int, b int) int {
-    return a + b
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Chào bạn! Đây là Go App chạy trên port 8081 🚀")
 }
 
 func main() {
-    fmt.Println("GitHub Actions Go Sample")
-    fmt.Printf("Sum of 5 + 5 is: %d\n", Sum(5, 5))
+	http.HandleFunc("/", helloHandler)
+
+	port := ":8081"
+	fmt.Printf("Server đang khởi động tại http://localhost%s\n", port)
+	
+	// Bắt đầu lắng nghe và phục vụ
+	if err := http.ListenAndServe(port, nil); err != nil {
+		fmt.Printf("Lỗi khởi động server: %s\n", err)
+	}
 }
