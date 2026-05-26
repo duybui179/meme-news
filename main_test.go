@@ -12,6 +12,6 @@ import "testing"
 func TestHello(t *testing.T){
 	result := 200
 	if (result == 200){
-		t.Printf("The content: {}", result);
+		t.Logf("The content: %v", result);
 	}
 }
