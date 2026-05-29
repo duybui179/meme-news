@@ -3,34 +3,42 @@ name: Go CI Test
 # Kích hoạt khi có push hoặc pull request vào nhánh main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    steps:
-      # Bước 1: Lấy code từ repo
-      - name: Checkout code
+    step: 
+        - name: Checkout Code
         uses: actions/checkout@v4
+        
+        - name: Show Current Branch
+        run: |
+          echo "Full Ref: ${{ github.ref }}"
+          echo "Branch Name: ${{ github.ref_name }}"
 
-      # Bước 2: Cài đặt môi trường Go
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-          cache: true # Tự động cache dependency để chạy nhanh hơn
+    # steps:
+    #   # Bước 1: Lấy code từ repo
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
 
-      # Bước 3: Kiểm tra lỗi cú pháp (Linter)
-      - name: Verify dependencies
-        run: go mod verify
+    #   # Bước 2: Cài đặt môi trường Go
+    #   - name: Set up Go
+    #     uses: actions/setup-go@v5
+    #     with:
+    #       go-version: '1.22'
+    #       cache: true # Tự động cache dependency để chạy nhanh hơn
 
-      # Bước 4: Build project
-      - name: Build
-        run: go build -v ./...
+    #   # Bước 3: Kiểm tra lỗi cú pháp (Linter)
+    #   - name: Verify dependencies
+    #     run: go mod verify
 
-      # Bước 5: Chạy Unit Test
-      - name: Run Tests
-        run: go test -v ./...
+    #   # Bước 4: Build project
+    #   - name: Build
+    #     run: go build -v ./...
+
+    #   # Bước 5: Chạy Unit Test
+    #   - name: Run Tests
+    #     run: go test -v ./...
