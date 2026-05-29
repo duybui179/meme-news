@@ -10,10 +10,10 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    step: 
+    steps: 
         - name: Checkout Code
         uses: actions/checkout@v4
-        
+
         - name: Show Current Branch
         run: |
           echo "Full Ref: ${{ github.ref }}"
