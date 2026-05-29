@@ -20,6 +20,12 @@ jobs:
             echo "Full Ref: ${{ github.ref }}"
             echo "Branch Name: ${{ github.ref_name }}"
 
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              echo "This is MAIN"
+            else
+              echo "This is DEV"
+            fi
+
     # steps:
     #   # Bước 1: Lấy code từ repo
     #   - name: Checkout code
