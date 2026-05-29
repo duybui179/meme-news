@@ -10,14 +10,15 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
     steps: 
         - name: Checkout Code
-        uses: actions/checkout@v4
+          uses: actions/checkout@v4
 
         - name: Show Current Branch
-        run: |
-          echo "Full Ref: ${{ github.ref }}"
-          echo "Branch Name: ${{ github.ref_name }}"
+          run: |
+            echo "Full Ref: ${{ github.ref }}"
+            echo "Branch Name: ${{ github.ref_name }}"
 
     # steps:
     #   # Bước 1: Lấy code từ repo
