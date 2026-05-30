@@ -61,12 +61,11 @@ jobs:
       # Bước 1: Kiểm tra định dạng code (Format)
       - name: Check Code Formatting
         run: |
-          if [ -n "$FORMAT_ISSUES" ]; then
-            echo "Các file sau chưa được format đúng chuẩn 'go fmt':"
-            echo "$FORMAT_ISSUES"
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Các file sau chưa được format đúng chuẩn gofmt:"
+            gofmt -l .
             exit 1
           fi
-          
 
       # Bước 2: Chạy Go Vet để bắt lỗi logic tĩnh
       - name: Run Go Vet
