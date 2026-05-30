@@ -3,34 +3,81 @@ name: Go CI Test
 # Kích hoạt khi có push hoặc pull request vào nhánh main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    steps: 
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        - name: Show Current Branch
+          run: |
+            echo "Full Ref: ${{ github.ref }}"
+            echo "Branch Name: ${{ github.ref_name }}"
+
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              echo "This is MAIN"
+            else
+              echo "This is DEV"
+            fi
+
+    # steps:
+    #   # Bước 1: Lấy code từ repo
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
+
+    #   # Bước 2: Cài đặt môi trường Go
+    #   - name: Set up Go
+    #     uses: actions/setup-go@v5
+    #     with:
+    #       go-version: '1.22'
+    #       cache: true # Tự động cache dependency để chạy nhanh hơn
+
+    #   # Bước 3: Kiểm tra lỗi cú pháp (Linter)
+    #   - name: Verify dependencies
+    #     run: go mod verify
+
+    #   # Bước 4: Build project
+    #   - name: Build
+    #     run: go build -v ./...
+
+    #   # Bước 5: Chạy Unit Test
+    #   - name: Run Tests
+    #     run: go test -v ./...
+
+  golang-ci-check:
+    name: Run Go Checks on Local Runner
+    runs-on: self-hosted          # Chỉ định chạy trên máy local của bạn
+
     steps:
-      # Bước 1: Lấy code từ repo
-      - name: Checkout code
+      - name: Check out repository code
         uses: actions/checkout@v4
 
-      # Bước 2: Cài đặt môi trường Go
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-          cache: true # Tự động cache dependency để chạy nhanh hơn
+      - name: Show runner info
+        run: |
+          echo "Runner: $RUNNER_NAME"
+          echo "OS: $RUNNER_OS"
+          echo "Arch: $RUNNER_ARCH"
 
-      # Bước 3: Kiểm tra lỗi cú pháp (Linter)
-      - name: Verify dependencies
-        run: go mod verify
+      - name: Start test server on port 8080
+        run: |
+          python3 -m http.server 8080 --bind 0.0.0.0 > server.log 2>&1 &
+          echo $! > server.pid
+          sleep 2
 
-      # Bước 4: Build project
-      - name: Build
-        run: go build -v ./...
+      - name: Check port is listening
+        run: |
+          ss -ltnp | grep 8080 || true
+          curl -I http://127.0.0.1:8080 || true
 
-      # Bước 5: Chạy Unit Test
-      - name: Run Tests
-        run: go test -v ./...
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
