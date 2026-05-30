@@ -49,3 +49,24 @@ jobs:
     #   # Bước 5: Chạy Unit Test
     #   - name: Run Tests
     #     run: go test -v ./...
+
+  golang-ci-check:
+    name: Run Go Checks on Local Runner
+    runs-on: self-hosted          # Chỉ định chạy trên máy local của bạn
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Bước 1: Kiểm tra định dạng code (Format)
+      - name: Check Code Formatting
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Các file sau chưa được format đúng chuẩn 'go fmt':"
+            gofmt -l .
+            exit 1
+          fi
+
+      # Bước 2: Chạy Go Vet để bắt lỗi logic tĩnh
+      - name: Run Go Vet
+        run: go vet ./...
