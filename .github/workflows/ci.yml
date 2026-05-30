@@ -66,6 +66,11 @@ jobs:
             gofmt -l .
             exit 1
           fi
+          if [ -n "$FORMAT_ISSUES" ]; then
+            echo "Các file sau chưa được format đúng chuẩn 'go fmt':"
+            echo "$FORMAT_ISSUES"
+            exit 1
+          fi
 
       # Bước 2: Chạy Go Vet để bắt lỗi logic tĩnh
       - name: Run Go Vet
