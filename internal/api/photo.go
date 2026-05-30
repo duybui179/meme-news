@@ -1,19 +1,19 @@
 package api
 
 import (
-	"encoding/json"
-	"net/http"
 	"dev.duybt/internal/models"
+	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
-func GetPhotoByURL(url string) ([]models.Photo, error){
+func GetPhotoByURL(url string) ([]models.Photo, error) {
 	return fetchPhotos(url)
 }
 
 type result struct {
-    photos []models.Photo
-    err    error
+	photos []models.Photo
+	err    error
 }
 
 func GetContenGoroutine(urls []string) [][]models.Photo {
@@ -26,19 +26,19 @@ func GetContenGoroutine(urls []string) [][]models.Photo {
 		}(u)
 	}
 
-	var all [][]models.Photo 
+	var all [][]models.Photo
 	for range urls {
-		res := <- ch 
-		 if res.err != nil {
-            fmt.Println("Error:", res.err)
-            continue
-        }
-        all = append(all, res.photos)
-    }
-    return all
+		res := <-ch
+		if res.err != nil {
+			fmt.Println("Error:", res.err)
+			continue
+		}
+		all = append(all, res.photos)
+	}
+	return all
 }
 
-func fetchPhotos(url string) ([]models.Photo, error){
+func fetchPhotos(url string) ([]models.Photo, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func fetchPhotos(url string) ([]models.Photo, error){
 	defer resp.Body.Close()
 
 	var photos []models.Photo
-	if err := json.NewDecoder(resp.Body).Decode(&photos);  err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&photos); err != nil {
 		return nil, err
 	}
 	return photos, nil

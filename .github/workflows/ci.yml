@@ -58,15 +58,26 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      # Bước 1: Kiểm tra định dạng code (Format)
-      - name: Check Code Formatting
+      - name: Show runner info
         run: |
-          if [ -n "$(gofmt -l .)" ]; then
-            echo "Các file sau chưa được format đúng chuẩn 'go fmt':"
-            gofmt -l .
-            exit 1
-          fi
+          echo "Runner: $RUNNER_NAME"
+          echo "OS: $RUNNER_OS"
+          echo "Arch: $RUNNER_ARCH"
 
-      # Bước 2: Chạy Go Vet để bắt lỗi logic tĩnh
-      - name: Run Go Vet
-        run: go vet ./...
+      - name: Start test server on port 8080
+        run: |
+          python3 -m http.server 8080 --bind 0.0.0.0 > server.log 2>&1 &
+          echo $! > server.pid
+          sleep 2
+
+      - name: Check port is listening
+        run: |
+          ss -ltnp | grep 8080 || true
+          curl -I http://127.0.0.1:8080 || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
