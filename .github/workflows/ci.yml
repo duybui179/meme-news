@@ -63,8 +63,6 @@ jobs:
           echo "Runner: $RUNNER_NAME"
           echo "OS: $RUNNER_OS"
           echo "Arch: $RUNNER_ARCH"
-          uname -a
-          pwd
 
       - name: Start test server on port 8080
         run: |
