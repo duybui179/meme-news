@@ -1,36 +1,35 @@
 package api
 
-import(
+import (
 	"fmt"
-	"dev.duybt/internal/api"
 )
 
-func GetContent(){
+func GetContent() {
 	result := "meme"
 	fmt.Println("Check content", result)
 
-	api.GetContent()
-	
-	url := "https://jsonplaceholder.typicode.com/photos"
+	// api.GetContent()
 
-	photos, err := api.GetPhotoByURL(url)
+	// url := "https://jsonplaceholder.typicode.com/photos"
 
-	if err != nil {
-        panic(err)
-    }
+	// photos, err := api.GetPhotoByURL(url)
 
-	 for i := 0; i < 5; i++ {
-        fmt.Printf("%d: %s (%s)\n", photos[i].ID, photos[i].Title, photos[i].URL)
-    }
+	// if err != nil {
+	//     panic(err)
+	// }
 
-	 urls := []string{
-        "https://jsonplaceholder.typicode.com/photos",
-        "https://jsonplaceholder.typicode.com/comments", // ví dụ thêm
-    }
+	//  for i := 0; i < 5; i++ {
+	//     fmt.Printf("%d: %s (%s)\n", photos[i].ID, photos[i].Title, photos[i].URL)
+	// }
 
-	results := api.GetContenGoroutine(urls)
+	//  urls := []string{
+	//     "https://jsonplaceholder.typicode.com/photos",
+	//     "https://jsonplaceholder.typicode.com/comments", // ví dụ thêm
+	// }
 
-	for i, photos := range results {
-        fmt.Printf("URL %d có %d phần tử\n", i+1, len(photos))
-    }
+	// results := api.GetContenGoroutine(urls)
+
+	// for i, photos := range results {
+	//     fmt.Printf("URL %d có %d phần tử\n", i+1, len(photos))
+	// }
 }

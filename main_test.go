@@ -9,9 +9,9 @@ import "testing"
 //     }
 // }
 
-func TestHello(t *testing.T){
+func TestHello(t *testing.T) {
 	result := 200
-	if (result == 200){
-		t.Logf("The content: %v", result);
+	if result == 200 {
+		t.Logf("The content: %v", result)
 	}
 }
